@@ -1,0 +1,86 @@
+#include <stdio.h>
+#include <string.h>
+
+int main()
+{
+    //variable declaration
+    int num, count, flag, mostFreqCount=0; 
+    char temp[20], largestWord[20];
+    
+    num = 0;
+    
+    //creating an object
+    FILE *fp;
+    
+    //open the file in read mode
+    fp = fopen("file.txt", "r"); //"file.txt is the name of the file and should be replaced with the name of the file you want to check
+    
+    //declare array
+    char words[100][20], c;
+    int i=0;
+    count=0;
+    
+    if(fp)
+    {
+        int k = 0;
+        
+        //read file
+        while ((c = getc(fp)) != EOF) //EOF indicates the end of file
+        {
+            if(c==' ' || c=='.') // ' ' means a space between the words and '.' end of a sentence 
+            {
+                words[k][i] = '\0';//declare the end of the file content
+                if(i>count)
+                {
+                    strcpy(largestWord,words[k]); //used to copy one string to the other variable
+                    count = i;
+                }
+                i = 0;
+                k++;
+                num++;
+            }
+            else
+            {
+                words[k][i++] = c;
+            }
+        }
+        
+        
+        fclose(fp);
+    }
+    else
+        printf("Unable to open the file."); // If file name not found
+    
+    
+    //display the frequency of elements of the array
+    printf("\nThe frequency of all words in your file:\n");
+    for(int i=0; i<num; i++)
+    {
+        strcpy(temp, words[i]);
+        
+        count = 0;
+        flag = 0; 
+        for(int j=0; j<i; j++)
+        {
+            if(strcmp(temp, words[j])==0)
+            {
+                flag = 1;
+                break;
+            }
+        }
+        if(!flag)
+        {
+            for(int j=i; j<num; j++)
+            {
+                if(strcmp(temp, words[j])==0)
+                    count++;
+            }
+            
+            printf("%s %d\n", temp, count);
+        }
+    }
+    
+    //display the largest word
+    printf("\nThe largest word in your file is: %s\n", largestWord);
+    return 0;
+}
